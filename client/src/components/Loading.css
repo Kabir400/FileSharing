@@ -1,0 +1,38 @@
+/* Loading.css */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(5px);
+}
+
+.loading-popup {
+  padding: 20px;
+  width: 300px;
+  text-align: center;
+}
+
+.loading-bar {
+  height: 8px;
+  background-color: #4caf50;
+  border-radius: 4px;
+  transition: width 0.2s ease;
+}
+
+.loading-text {
+  margin-top: 10px;
+  font-size: 2rem;
+  color: white; /* Text color for percentage */
+}
+
+.loading-message {
+  margin-top: 5px;
+  color: white; /* Text color for the message */
+  font-size: 1rem;
+}

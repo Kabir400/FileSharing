@@ -1,0 +1,21 @@
+.share-container {
+  display: flex;
+  justify-self: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.home-link {
+  text-decoration: none;
+  color: white;
+  font-size: 1.3rem;
+  cursor: pointer;
+  padding: 10px 20px;
+  border: 2px solid white;
+  border-radius: 5px;
+
+  transition: all 0.3s ease;
+}
+.home-link:hover {
+  border: 2px solid #3498db;
+}
