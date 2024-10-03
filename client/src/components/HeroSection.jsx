@@ -1,3 +1,5 @@
+const base_url = import.meta.env.VITE_BASE_URL;
+
 import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -19,7 +21,7 @@ const HeroSection = () => {
     setProgress(0);
     try {
       // Step 1: Request presigned URL from backend
-      const response = await axios.post("http://localhost:3000/api/v1/getUrl", {
+      const response = await axios.post(`${base_url}/api/v1/getUrl`, {
         fileName: file.name,
         fileType: file.type,
       });

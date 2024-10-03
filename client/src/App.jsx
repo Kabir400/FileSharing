@@ -5,6 +5,7 @@ import "./App.css";
 import FileShare from "./components/FileShare.jsx";
 
 function App() {
+  console.log(import.meta.env.VITE_SOME_KEY);
   return (
     <div className="App">
       <Router>

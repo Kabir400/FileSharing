@@ -7,12 +7,34 @@ provider:
   runtime: nodejs18.x
   region: ap-south-1
   stage: ${opt:stage, 'dev'}
+  httpApi:
+    cors:
+      allowedOrigins:
+        - "*"
+      allowedHeaders:
+        - Content-Type
+        # - X-Amz-Date
+        # - Authorization
+        # - X-Api-Key
+        # - X-Amz-Security-Token
+      allowedMethods:
+        # - GET
+        - POST
+        # - PUT
+        # - DELETE
+        # - OPTIONS
+      # exposeHeaders:
+      #   - X-My-Custom-Header
+      maxAge: 300 # Optional: how long the response can be cached
 
 functions:
   fileHandler:
     handler: handler.handler
     events:
-      - httpApi: "*"
+      - httpApi:
+          "*"
+          # path: /example
+          # method: get
 
 plugins:
   - serverless-offline

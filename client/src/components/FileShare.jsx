@@ -1,3 +1,5 @@
+const base_url = import.meta.env.VITE_BASE_URL;
+
 import React, { useEffect, useState } from "react";
 import "./FileShare.css";
 import { useParams, useLocation } from "react-router-dom";
@@ -22,10 +24,9 @@ function FileShare() {
 
       try {
         // Step 1: Fetch view URL
-        const response = await axios.post(
-          "http://localhost:3000/api/v1/viewUrl",
-          { fileName: id }
-        );
+        const response = await axios.post(`${base_url}/api/v1/viewUrl`, {
+          fileName: id,
+        });
 
         // If the view URL is not returned, handle the error
         if (!response.data.url) {
@@ -37,7 +38,7 @@ function FileShare() {
 
         // Step 2: Fetch download URL
         const downloadResponse = await axios.post(
-          "http://localhost:3000/api/v1/downloadUrl",
+          `${base_url}/api/v1/downloadUrl`,
           { fileName: id }
         );
 

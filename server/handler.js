@@ -1,9 +1,12 @@
 const express = require("express");
 const serverless = require("serverless-http");
+const cors = require("cors");
 
 const fileRouter = require("./routes/fileRouter.js");
 
 const app = express();
+
+app.use(cors());
 
 app.use(express.json());
 
