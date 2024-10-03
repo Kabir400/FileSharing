@@ -16,27 +16,46 @@ function FileShare() {
   const [expire, setExpire] = useState(false);
   const [downloadUrl, setDownloadUrl] = useState(null);
   const [copyUrl, setCopyUrl] = useState("");
-
   useEffect(() => {
     (async () => {
       setWait(true);
-      const response = await axios.post(
-        "http://localhost:3000/api/v1/viewUrl",
-        {
-          fileName: id,
+
+      try {
+        // Step 1: Fetch view URL
+        const response = await axios.post(
+          "http://localhost:3000/api/v1/viewUrl",
+          { fileName: id }
+        );
+
+        // If the view URL is not returned, handle the error
+        if (!response.data.url) {
+          setWait(false);
+          setUrl(null);
+          setExpire(true);
+          return;
         }
-      );
-      // Fetch download URL
-      const downloadResponse = await axios.post(
-        "http://localhost:3000/api/v1/downloadUrl",
-        { fileName: id }
-      );
-      if (response.data.url && downloadResponse.data.url) {
-        setWait(false);
-        setUrl(response.data.url);
-        setDownloadUrl(downloadResponse.data.url);
-        setExpire(false);
-      } else {
+
+        // Step 2: Fetch download URL
+        const downloadResponse = await axios.post(
+          "http://localhost:3000/api/v1/downloadUrl",
+          { fileName: id }
+        );
+
+        // If both URLs are successfully fetched, update the state
+        if (response.data.url && downloadResponse.data.url) {
+          setWait(false);
+          setUrl(response.data.url);
+          setDownloadUrl(downloadResponse.data.url);
+          setExpire(false);
+        } else {
+          // Handle the case where URLs are not found
+          setWait(false);
+          setUrl(null);
+          setExpire(true);
+        }
+      } catch (error) {
+        // Handle any errors from the axios requests
+        console.error("Error fetching URLs:", error);
         setWait(false);
         setUrl(null);
         setExpire(true);
@@ -48,7 +67,7 @@ function FileShare() {
     const shareUrl = fullUrl || url || viewUrl;
     navigator.clipboard.writeText(shareUrl).then(() => {
       setCopyUrl("Link copied to clipboard!");
-      setTimeout(() => setCopyUrl(""), 2000); // Clear message after 2 seconds
+      setTimeout(() => setCopyUrl(""), 800); // Clear message after 2 seconds
     });
   };
 

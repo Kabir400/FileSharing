@@ -1,4 +1,10 @@
-const { getUploadUrl, getViewUrl, getDownloadUrl } = require("../config/s3.js");
+const {
+  getUploadUrl,
+  getViewUrl,
+  getDownloadUrl,
+  s3,
+} = require("../config/s3.js");
+const { HeadObjectCommand } = require("@aws-sdk/client-s3");
 
 const getPresinedUrlForUpload = async (req, res) => {
   try {
@@ -16,8 +22,24 @@ const getPresinedUrlForUpload = async (req, res) => {
 };
 
 const getPresinedUrlForView = async (req, res) => {
+  const { fileName } = req.body;
   try {
-    const { fileName } = req.body;
+    const headObjectCommand = new HeadObjectCommand({
+      Bucket: "kabir-upload-app",
+      Key: fileName,
+    });
+
+    try {
+      await s3.send(headObjectCommand);
+    } catch (error) {
+      if (error.name === "NotFound") {
+        return res.status(404).json({
+          error: `The file with key "${key}" does not exist in the bucket.`,
+        });
+      }
+      throw error; // handle other error
+    }
+
     const url = await getViewUrl(fileName);
     res.status(200).json({ url });
   } catch (err) {
@@ -26,8 +48,23 @@ const getPresinedUrlForView = async (req, res) => {
 };
 
 const getPresinedUrlForDownload = async (req, res) => {
+  const { fileName } = req.body;
   try {
-    const { fileName } = req.body;
+    const headObjectCommand = new HeadObjectCommand({
+      Bucket: "kabir-upload-app",
+      Key: fileName,
+    });
+    try {
+      await s3.send(headObjectCommand);
+    } catch (error) {
+      if (error.name === "NotFound") {
+        return res.status(404).json({
+          error: `The file with key "${key}" does not exist in the bucket.`,
+        });
+      }
+      throw error; // Handle any other errors
+    }
+
     const url = await getDownloadUrl(fileName);
     res.status(200).json({ url });
   } catch (err) {

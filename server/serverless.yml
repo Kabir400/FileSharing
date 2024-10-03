@@ -1,4 +1,4 @@
-service: auth-api
+service: fileHandler
 
 frameworkVersion: "4"
 
